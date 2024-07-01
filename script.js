@@ -1,70 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Sélection des éléments HTML nécessaires
     const pokemonContainer = document.getElementById('pokemonContainer');
     const searchInput = document.getElementById('searchInput');
     const typeFilter = document.getElementById('typeFilter');
     const modal = document.getElementById('pokemonModal');
     const modalContent = document.getElementById('modalContent');
-    const closeModal = document.querySelector('.close');
+    const closeModal = document.getElementsByClassName('close')[0];
 
-    // Chargement des Types de Pokémon
-    fetch('https://pokeapi.co/api/v2/type')
-        .then(response => response.json())
-        .then(data => {
-            const types = data.results;
-            types.forEach(type => {
-                const option = document.createElement('option');
-                option.value = type.name;
-                option.textContent = type.name.charAt(0).toUpperCase() + type.name.slice(1);
-                typeFilter.appendChild(option);
-            });
-        });
+    closeModal.onclick = function() {
+        modal.style.display = "none";
+    };
 
-    // Chargement des Pokémon de la Première Génération
-    fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
-        .then(response => response.json())
-        .then(data => {
-            const pokemons = data.results;
-            displayPokemons(pokemons);
-        });
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    };
 
-    // Filtrage des Pokémon par Nom et Type
-    searchInput.addEventListener('input', () => {
-        filterPokemons();
-    });
-
-    typeFilter.addEventListener('change', () => {
-        filterPokemons();
-    });
-
-    // Filtrage des Pokémon 
-    function filterPokemons() {
-        const searchTerm = searchInput.value.toLowerCase();
-        const selectedType = typeFilter.value;
-
+    function fetchPokemons() {
         fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
             .then(response => response.json())
             .then(data => {
-                const filteredPokemons = data.results.filter(pokemon => {
-                    return pokemon.name.includes(searchTerm);
-                });
-
-                if (selectedType) {
-                    const typeUrl = `https://pokeapi.co/api/v2/type/${selectedType}`;
-                    fetch(typeUrl)
-                        .then(response => response.json())
-                        .then(typeData => {
-                            const typePokemons = typeData.pokemon.map(p => p.pokemon);
-                            const finalFilteredPokemons = filteredPokemons.filter(p => typePokemons.find(tp => tp.name === p.name));
-                            displayPokemons(finalFilteredPokemons);
-                        });
-                } else {
-                    displayPokemons(filteredPokemons);
-                }
+                displayPokemons(data.results);
             });
     }
 
-    // Affichage des Pokémon
     function displayPokemons(pokemons) {
         pokemonContainer.innerHTML = '';
         pokemons.forEach(pokemon => {
@@ -84,7 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     pokemonTypes.classList.add('pokemonType');
                     data.types.forEach(typeInfo => {
                         const type = document.createElement('span');
-                        type.textContent = typeInfo.type.name;
+                        type.textContent = typeInfo.type.name.charAt(0).toUpperCase() + typeInfo.type.name.slice(1);
+                        type.classList.add(`type-${typeInfo.type.name.toLowerCase()}`); // Appliquer la classe de type
                         pokemonTypes.appendChild(type);
                     });
 
@@ -100,44 +60,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Affichage des Détails des Pokémon
     function showPokemonDetails(pokemon) {
-        fetch(pokemon.species.url)
-            .then(response => response.json())
-            .then(speciesData => {
-                const description = speciesData.flavor_text_entries.find(entry => entry.language.name === 'en').flavor_text;
-                const abilities = pokemon.abilities.map(ability => ability.ability.name).join(', ');
+        modalContent.innerHTML = `
+            <div class="modal-header">
+                <h2>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)} (#${pokemon.id})</h2>
+                <span class="close">&times;</span>
+            </div>
+            <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
+            <div>
+                <h3>About</h3>
+                <p>Height: ${pokemon.height / 10} m</p>
+                <p>Weight: ${pokemon.weight / 10} kg</p>
+                <p>Abilities: ${pokemon.abilities.map(ability => ability.ability.name).join(', ')}</p>
+            </div>
+            <div class="modal-stats">
+                <h3>Stats</h3>
+                ${pokemon.stats.map(stat => `
+                    <div>
+                        <span>${stat.stat.name.toUpperCase()}:</span>
+                        <span>${stat.base_stat}</span>
+                    </div>
+                `).join('')}
+            </div>
+        `;
 
-                modalContent.innerHTML = `
-                    <div class="modal-header">
-                        <h2>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)} (#${pokemon.id})</h2>
-                    </div>
-                    <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
-                    <p>Height: ${pokemon.height / 10} m</p>
-                    <p>Weight: ${pokemon.weight / 10} kg</p>
-                    <p>Abilities: ${abilities}</p>
-                    <p>${description}</p>
-                    <div class="modal-stats">
-                        ${pokemon.stats.map(stat => `
-                            <div>
-                                <span>${stat.stat.name.toUpperCase()}:</span>
-                                <span>${stat.base_stat}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-                modal.style.display = "block";
-            });
+        modal.style.display = "block";
+
+        document.getElementsByClassName('close')[0].onclick = function() {
+            modal.style.display = "none";
+        };
     }
 
-    // Fermeture de la Modale
-    closeModal.addEventListener('click', () => {
-        modal.style.display = "none";
-    });
-
-    window.addEventListener('click', (event) => {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    });
+    fetchPokemons();
 });
