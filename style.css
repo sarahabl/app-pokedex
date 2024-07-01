@@ -45,7 +45,12 @@ h1 {
 .pokemonType {
     margin-top: 5px;
     font-size: 0.9em;
+    display: flex;
+    flex-wrap: wrap;
     color: #555;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-evenly;
 }
 
 /* Modale Styles */
