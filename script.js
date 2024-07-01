@@ -103,7 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 modalContent.innerHTML = `
                     <div class="modal-header">
-                        <button class="close">&times;</button>
                         <h2>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)} (#${pokemon.id})</h2>
                     </div>
                     <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
