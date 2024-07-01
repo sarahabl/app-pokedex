@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Sélection des éléments HTML nécessaires
     const pokemonContainer = document.getElementById('pokemonContainer');
     const searchInput = document.getElementById('searchInput');
     const typeFilter = document.getElementById('typeFilter');
@@ -6,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalContent = document.getElementById('modalContent');
     const closeModal = document.querySelector('.close');
 
+    // Chargement des Types de Pokémon
     fetch('https://pokeapi.co/api/v2/type')
         .then(response => response.json())
         .then(data => {
@@ -18,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+    // Chargement des Pokémon de la Première Génération
     fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
         .then(response => response.json())
         .then(data => {
@@ -25,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             displayPokemons(pokemons);
         });
 
+    // Filtrage des Pokémon par Nom et Type
     searchInput.addEventListener('input', () => {
         filterPokemons();
     });
@@ -33,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         filterPokemons();
     });
 
+    // Filtrage des Pokémon 
     function filterPokemons() {
         const searchTerm = searchInput.value.toLowerCase();
         const selectedType = typeFilter.value;
@@ -59,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
+    // Affichage des Pokémon
     function displayPokemons(pokemons) {
         pokemonContainer.innerHTML = '';
         pokemons.forEach(pokemon => {
@@ -94,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Affichage des Détails des Pokémon
     function showPokemonDetails(pokemon) {
         fetch(pokemon.species.url)
             .then(response => response.json())
@@ -103,7 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 modalContent.innerHTML = `
                     <div class="modal-header">
-                        <button class="close">&times;</button>
                         <h2>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)} (#${pokemon.id})</h2>
                     </div>
                     <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
@@ -124,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
+    // Fermeture de la Modale
     closeModal.addEventListener('click', () => {
         modal.style.display = "none";
     });
