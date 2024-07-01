@@ -7,15 +7,19 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Pokédex</h1>
-    <input type="text" id="searchInput" placeholder="Rechercher un Pokémon">
-    <div id="filterContainer">
-        <select id="typeFilter">
-            <option value="">Tous les types</option>
-        </select>
+    <div class="header">
+        <img src="./images/pokeball.svg" alt="icon pokeball">
+        <h1>Pokédex</h1>
+    </div>
+    <div class="filter">
+        <input type="text" id="searchInput" placeholder="Rechercher un Pokémon">
+        <div id="filterContainer">
+            <select id="typeFilter">
+                <option value="">Tous les types</option>
+            </select>
+        </div>
     </div>
     <div id="pokemonContainer"></div>
-
     <div id="pokemonModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
