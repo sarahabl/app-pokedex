@@ -107,19 +107,22 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(pokemon.species.url)
             .then(response => response.json())
             .then(speciesData => {
-                const description = speciesData.flavor_text_entries.find(entry => entry.language.name === 'en').flavor_text;
+                const description = speciesData.flavor_text_entries.find(entry => entry.language.name === 'fr').flavor_text;
                 const abilities = pokemon.abilities.map(ability => ability.ability.name).join(', ');
 
                 modalContent.innerHTML = `
                     <div class="modal-header">
                         <h2>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)} (#${pokemon.id})</h2>
+                        <button id="playCryButton">L'écouter</button>
                     </div>
                     <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
+                    <h3> Caractéristiques </h3>
                     <p>Height: ${pokemon.height / 10} m</p>
                     <p>Weight: ${pokemon.weight / 10} kg</p>
                     <p>Abilities: ${abilities}</p>
                     <p>${description}</p>
                     <div class="modal-stats">
+                    <h3> Stats </h3>
                         ${pokemon.stats.map(stat => `
                             <div>
                                 <span>${stat.stat.name.toUpperCase()}:</span>
@@ -129,6 +132,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
                 modal.style.display = "block";
+
+                // Ajouter le gestionnaire d'événements pour le bouton de lecture
+                const playCryButton = document.getElementById('playCryButton');
+                playCryButton.addEventListener('click', () => {
+                    const audio = new Audio(`https://veekun.com/dex/media/pokemon/cries/${pokemon.id}.ogg`);
+                    audio.play();
+                });
             });
     }
 
