@@ -43,6 +43,8 @@ body {
 
 h1 {
     color: white;
+    font-family: 'Pokemon Solid', sans-serif;
+    letter-spacing: 4px;
 }
 
 .filter {
