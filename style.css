@@ -48,8 +48,22 @@ h1 {
 .filter {
     display: flex;
     flex-direction: row;
-    gap : 28px;
+    gap : 8px;
     width:100%;
+}
+
+#resetButton {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #DC0A2D;
+    color: white;
+    cursor: pointer;
+}
+
+#resetButton:hover {
+    background-color: #B10A2D;
 }
 
 #searchInput, #typeFilter {

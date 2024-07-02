@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    
     // Sélection des éléments HTML nécessaires
     const pokemonContainer = document.getElementById('pokemonContainer');
     const searchInput = document.getElementById('searchInput');
@@ -140,5 +141,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.target === modal) {
             modal.style.display = "none";
         }
+    });
+
+    //Bouton pour réinitialiser les champs de recherche et de filtre
+    resetButton.addEventListener('click', () => {
+        searchInput.value = '';
+        typeFilter.value = '';
+        fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
+            .then(response => response.json())
+            .then(data => {
+                const pokemons = data.results;
+                displayPokemons(pokemons);
+            });
     });
 });
