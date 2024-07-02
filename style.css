@@ -25,21 +25,19 @@ h1 {
 .filter {
     display: flex;
     flex-direction: row;
-    gap : 8px;
+    gap : 28px;
     width:100%;
 }
 
 #pokemonContainer {
     display: flex;
-    gap:16px;
+    flex-wrap: wrap;
+    gap: 10px;
     justify-content: center;
     background-color: white;
     box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.25) inset;
     border-radius: 0.5rem;
     padding: 1.5rem;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    justify-content: space-between;
 }
 
 
