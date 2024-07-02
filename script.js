@@ -88,8 +88,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementsByClassName('close')[0].onclick = function() {
             modal.style.display = "none";
-        };
-    }
-
-    fetchPokemons();
-});

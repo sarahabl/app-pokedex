@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     background-color: #f0f0f0;
     margin: 0;
     padding: 20px;
@@ -11,11 +11,11 @@ body {
 .header {
     display: flex;
     flex-direction: row;
-    gap :28px;
-
+    gap:8px;
 }
+
 .header img{
-    color :white;
+    color: white;
 }
 
 h1 {
@@ -25,15 +25,21 @@ h1 {
 .filter {
     display: flex;
     flex-direction: row;
-    gap : 28px;
+    gap : 8px;
+    width:100%;
 }
 
 #pokemonContainer {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    gap:16px;
     justify-content: center;
-    background-color:white ;
+    background-color: white;
+    box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.25) inset;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 
@@ -155,4 +161,52 @@ h1 {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+}
+
+.modal-stats div span:first-child {
+    font-weight: bold;
+}
+
+/* Styles spécifiques pour la modal de Pokémon */
+.pokemon-modal-content {
+    text-align: center;
+}
+
+.pokemon-modal-content .modal-header {
+    background-color: #ffcb05;
+    padding: 10px;
+    border-radius: 10px 10px 0 0;
+    color: white;
+}
+
+.pokemon-modal-content .pokemon-image {
+    margin: 20px 0;
+}
+
+.pokemon-modal-content .about {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.pokemon-modal-content .about div {
+    text-align: center;
+}
+
+.pokemon-modal-content .description {
+    margin: 20px 0;
+}
+
+.pokemon-modal-content .base-stats {
+    margin-top: 20px;
+}
+
+.pokemon-modal-content .base-stats div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.pokemon-modal-content .base-stats div span {
+    font-weight: bold;
 }
