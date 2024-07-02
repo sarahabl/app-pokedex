@@ -85,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     data.types.forEach(typeInfo => {
                         const type = document.createElement('span');
                         type.textContent = typeInfo.type.name;
+                        type.classList.add(typeInfo.type.name); // Ajout de la classe dynamique
                         pokemonTypes.appendChild(type);
                     });
 

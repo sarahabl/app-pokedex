@@ -90,16 +90,38 @@ h1 {
     height: 100px;
 }
 
-.pokemonType {
-    margin-top: 5px;
-    font-size: 0.9em;
-    color: #555;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-content: center;
-    justify-content: space-evenly;
+
+.pokemonType span {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    margin: 2px;
+    font-size: 0.8em;
+    font-weight: bold;
+    text-transform: capitalize;
 }
+
+/* Couleurs pour chaque type */
+.pokemonType span.bug { background-color: var(--bug); }
+.pokemonType span.dark { background-color: var(--dark); }
+.pokemonType span.dragon { background-color: var(--dragon); }
+.pokemonType span.electric { background-color: var(--electric); }
+.pokemonType span.fairy { background-color: var(--fairy); }
+.pokemonType span.fighting { background-color: var(--fighting); }
+.pokemonType span.fire { background-color: var(--fire); }
+.pokemonType span.flying { background-color: var(--flying); }
+.pokemonType span.ghost { background-color: var(--ghost); }
+.pokemonType span.grass { background-color: var(--grass); }
+.pokemonType span.normal { background-color: var(--normal); }
+.pokemonType span.ground { background-color: var(--ground); }
+.pokemonType span.ice { background-color: var(--ice); }
+.pokemonType span.poison { background-color: var(--poison); }
+.pokemonType span.psychic { background-color: var(--psychic); }
+.pokemonType span.rock { background-color: var(--rock); }
+.pokemonType span.steel { background-color: var(--steel); }
+.pokemonType span.water { background-color: var(--water); }
+
+
 
 /* Modale Styles */
 .modal {
