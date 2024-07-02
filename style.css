@@ -1,3 +1,25 @@
+/* Colors */
+:root {
+    --bug: #A7B723;
+    --dark:#75574C;
+    --dragon:#7037FF;
+    --electric:#F9CF30;
+    --fairy:#E69EAC;
+    --fighting:#C12239;
+    --fire: #F57D31;
+    --flying : #A891EC;
+    --ghost: #70589B;
+    --grass: #74CB48;
+    --normal: #AAA67F;
+    --ground:#DEC16B;
+    --ice: #9AD6DF;
+    --poison: #A43E9E;
+    --psychic: #FB5584;
+    --rock:#b69E31;
+    --steel: #B7B9D0;
+    --water: #6493EB;
+  }
+
 body {
     font-family: Arial, sans-serif;
     display: flex;
@@ -8,14 +30,15 @@ body {
     padding: 20px;
     background: var(--Identity-Primary, #DC0A2D);
 }
+
 .header {
     display: flex;
     flex-direction: row;
     gap:8px;
 }
 
-.header img{
-    color: white;
+.header img {
+    color:white;
 }
 
 h1 {
@@ -64,7 +87,6 @@ h1 {
     padding: 1.5rem;
 }
 
-
 .pokemonCard {
     background-color: #fff;
     border: 1px solid #ccc;
@@ -75,10 +97,15 @@ h1 {
     cursor: pointer;
 }
 
+.pokemonCard:hover {
+    box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.20);
+}
+
 .pokemonCard img {
     width: 100px;
     height: 100px;
 }
+
 
 .pokemonType span {
     padding: 5px 10px;
@@ -110,41 +137,7 @@ h1 {
 .pokemonType span.steel { background-color: var(--steel); }
 .pokemonType span.water { background-color: var(--water); }
 
-.pokemonType {
-    margin-top: 5px;
-    font-size: 0.9em;
-    color: #555;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-}
 
-.pokemonType span {
-    padding: 5px 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    margin: 2px;
-}
-
-/* Types de Pokémon */
-.type-bug { background-color: #A7B723; color: white; }
-.type-dark { background-color: #75574C; color: white; }
-.type-dragon { background-color: #7037FF; color: white; }
-.type-electric { background-color: #F9CF30; color: white; }
-.type-fairy { background-color: #E69EAC; color: white; }
-.type-fighting { background-color: #C12239; color: white; }
-.type-fire { background-color: #F57D31; color: white; }
-.type-flying { background-color: #A891EC; color: white; }
-.type-ghost { background-color: #70589B; color: white; }
-.type-grass { background-color: #74CB48; color: white; }
-.type-normal { background-color: #AAA67F; color: white; }
-.type-ground { background-color: #DEC16B; color: white; }
-.type-ice { background-color: #9AD6DF; color: white; }
-.type-poison { background-color: #A43E9E; color: white; }
-.type-psychic { background-color: #FB5584; color: white; }
-.type-rock { background-color: #B69E31; color: white; }
-.type-steel { background-color: #B7B9D0; color: white; }
-.type-water { background-color: #6493EB; color: white; }
 
 /* Modale Styles */
 .modal {
@@ -168,6 +161,7 @@ h1 {
     width: 80%;
     max-width: 500px;
     border-radius: 10px;
+    font-family: Arial, sans-serif;
 }
 
 .close {
@@ -200,9 +194,7 @@ h1 {
 
 .modal-content img {
     display: block;
-    margin: 0 auto 20px auto;
-    width: 150px;
-    height: auto;
+    margin: 0 auto;
 }
 
 .modal-stats {
