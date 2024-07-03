@@ -121,15 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>Weight: ${pokemon.weight / 10} kg</p>
                     <p>Abilities: ${abilities}</p>
                     <p>${description}</p>
-                    <div class="modal-stats">
-                    <h3> Stats </h3>
-                        ${pokemon.stats.map(stat => `
-                            <div>
-                                <span>${stat.stat.name.toUpperCase()}:</span>
-                                <span>${stat.base_stat}</span>
-                            </div>
-                        `).join('')}
-                    </div>
                 `;
                 modal.style.display = "block";
 
