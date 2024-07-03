@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('pokemonModal');
     const modalContent = document.getElementById('modalContent');
     const closeModal = document.querySelector('.close');
-    const resetButton = document.getElementById('resetButton'); // Ajout du bouton de réinitialisation
 
     // Chargement des Types de Pokémon
     fetch('https://pokeapi.co/api/v2/type')
@@ -77,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     pokemonCard.classList.add('pokemonCard');
 
                     const pokemonImage = document.createElement('img');
-                    pokemonImage.src = data.sprites.versions['generation-v']['black-white'].animated.front_default; // Utilisation de l'image animée
+                    pokemonImage.src = data.sprites.front_default;
 
                     const pokemonName = document.createElement('h3');
                     pokemonName.textContent = data.name.charAt(0).toUpperCase() + data.name.slice(1);
@@ -111,15 +110,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const description = speciesData.flavor_text_entries.find(entry => entry.language.name === 'fr').flavor_text;
                 const abilities = pokemon.abilities.map(ability => ability.ability.name).join(', ');
 
-                // Récupération de l'image animée pour la carte modale
-                const animatedImageUrl = pokemon.sprites.versions['generation-v']['black-white'].animated.front_default;
-
                 modalContent.innerHTML = `
                     <div class="modal-header">
                         <h2>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)} (#${pokemon.id})</h2>
                         <button id="playCryButton">L'écouter</button>
                     </div>
-                    <img src="${animatedImageUrl}" alt="${pokemon.name}">
+                    <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
                     <h3> Caractéristiques </h3>
                     <p>Height: ${pokemon.height / 10} m</p>
                     <p>Weight: ${pokemon.weight / 10} kg</p>
@@ -157,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Bouton pour réinitialiser les champs de recherche et de filtre
+    //Bouton pour réinitialiser les champs de recherche et de filtre
     resetButton.addEventListener('click', () => {
         searchInput.value = '';
         typeFilter.value = '';
