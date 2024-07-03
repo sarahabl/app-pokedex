@@ -150,7 +150,6 @@ h1 {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.582);
-    padding-top: 20px;
 }
 
 .modal-content {
@@ -165,6 +164,10 @@ h1 {
     background-image: url('./images/bg-img.png');
     background-size: cover; /* Ensure the background image covers the entire modal */
     background-position: center; /* Center the background image */
+    display: flex;
+    height: 100vh;
+    padding-top: 0px;
+    position:relative;
 }
 
 .close {
@@ -256,4 +259,59 @@ h1 {
 
 .pokemon-modal-content .base-stats div span {
     font-weight: bold;
+}
+
+/* pokecard */
+#playCryButton {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+}
+
+.name-pokemon {
+    position: absolute;
+    top: 455px;
+    left: 50px;
+    font-size: 18px;
+}
+
+.img-pokemon {
+    position: absolute;
+    top: 125px;
+    left: 125px;
+    height: 100px;
+}
+
+.height {
+    position: absolute;
+    top: 269px;
+    right: 120px;
+}
+
+.weight {
+    position: absolute;
+    top: 269px;
+    left: 69px;
+}
+
+.intro {
+    position: absolute;
+    top: 490px;
+    width: 130px;
+    font-size: 12px;
+    left: 120px;
+}
+
+.abilities {
+    position: absolute;
+    top: 350px;
+    left: 65px;
+    font-size: 14px;
+}
+
+.close{
+    position: absolute;
+    top: 497px;
+    right: 61px;
+    color: hsla(0, 0%, 13%, 0.9);
 }
