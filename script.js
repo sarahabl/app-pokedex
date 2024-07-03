@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 modalContent.innerHTML = `
                     <div class="modal-header">
                         <h2 class="name-pokemon">${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)} (#${pokemon.id})</h2>
-                        <button id="playCryButton">L'écouter</button>
+                        <button id="playCryButton">🔊</button>
                     </div>
                     <img src="${animatedImageUrl}" alt="${pokemon.name}" class="img-pokemon">
                     <p class="height"> ${pokemon.height / 10} m</p>
