@@ -163,9 +163,8 @@ h1 {
     height: 632px;
     background-image: url('./images/bg-img.png');
     background-size: cover; /* Ensure the background image covers the entire modal */
-    background-position: center; /* Center the background image */
+    background-position: top;
     display: flex;
-    height: 100vh;
     padding-top: 0px;
     position:relative;
 }
@@ -264,7 +263,7 @@ h1 {
 /* pokecard */
 #playCryButton {
     position: absolute;
-    top: 20px;
+    top: 25px;
     left: 45px;
     background: transparent;
     border: none;
@@ -287,14 +286,14 @@ h1 {
 
 .height {
     position: absolute;
-    top: 269px;
+    top: 275px;
     right: 120px;
 }
 
 .weight {
     position: absolute;
-    top: 269px;
-    left: 69px;
+    top: 275px;
+    left: 70px;
 }
 
 .intro {
@@ -308,7 +307,7 @@ h1 {
 .abilities {
     position: absolute;
     top: 350px;
-    left: 65px;
+    left: 70px;
     font-size: 14px;
 }
 
