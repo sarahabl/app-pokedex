@@ -129,53 +129,54 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(pokemon.species.url)
             .then(response => response.json())
             .then(speciesData => {
-                const descriptionEntry = speciesData.flavor_text_entries.find(entry => entry.language.name === 'fr');
-                const description = descriptionEntry ? descriptionEntry.flavor_text : 'Description non disponible';
-                const abilities = pokemon.abilities.map(ability => {
-                    return fetch(ability.ability.url)
-                        .then(response => response.json())
-                        .then(abilityData => {
-                            const abilityNameEntry = abilityData.names.find(entry => entry.language.name === 'fr');
-                            return abilityNameEntry ? abilityNameEntry.name : ability.ability.name;
-                        });
-                });
+const descriptionEntry = speciesData.flavor_text_entries.find(entry => entry.language.name === 'fr');
+const description = descriptionEntry ? descriptionEntry.flavor_text : 'Description non disponible';
+const abilities = pokemon.abilities.map(ability => {
+    return fetch(ability.ability.url)
+        .then(response => response.json())
+        .then(abilityData => {
+            const abilityNameEntry = abilityData.names.find(entry => entry.language.name === 'fr');
+            return abilityNameEntry ? abilityNameEntry.name : ability.ability.name;
+        });
+});
 
-                Promise.all(abilities).then(abilitiesInFrench => {
-                    const abilitiesText = abilitiesInFrench.join(', ');
+Promise.all(abilities).then(abilitiesInFrench => {
+    const abilitiesText = abilitiesInFrench.join(', ');
 
-                    const frenchNameEntry = speciesData.names.find(entry => entry.language.name === 'fr');
-                    const pokemonName = frenchNameEntry ? frenchNameEntry.name : pokemon.name;
+    const frenchNameEntry = speciesData.names.find(entry => entry.language.name === 'fr');
+    const pokemonName = frenchNameEntry ? frenchNameEntry.name : pokemon.name;
 
-                    const animatedImageUrl = pokemon.sprites.versions['generation-v']['black-white'].animated.front_default;
+    const animatedImageUrl = pokemon.sprites.versions['generation-v']['black-white'].animated.front_default;
 
-                    modalContent.innerHTML = `
-                        <div class="modal-header">
-                            <h2>${pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1)} (#${pokemon.id})</h2>
-                            <button id="playCryButton">L'écouter</button>
-                        </div>
-                        <img src="${animatedImageUrl}" alt="${pokemonName}">
-                        <h3> Caractéristiques </h3>
-                        <p>Taille: ${pokemon.height / 10} m</p>
-                        <p>Poids: ${pokemon.weight / 10} kg</p>
-                        <p>Capacités: ${abilitiesText}</p>
-                        <p>${description}</p>
-                        <div class="modal-stats">
-                            <h3> Stats </h3>
-                            ${pokemon.stats.map(stat => `
-                                <div>
-                                    <span>${stat.stat.name.toUpperCase()}:</span>
-                                    <span>${stat.base_stat}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                    modal.style.display = "block";
+    modalContent.innerHTML = `
+        <div class="modal-header">
+            <h2>${pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1)} (#${pokemon.id})</h2>
+            <button id="playCryButton">🔊</button>
+        </div>
+        <img src="${animatedImageUrl}" alt="${pokemonName}" class="img-pokemon">
+        <p class="height"> ${pokemon.height / 10} m</p>
+        <p class="weight"> ${pokemon.weight / 10} kg</p>
+        <p class="abilities"> ${abilitiesText}</p>
+        <p class="intro">${description}</p>
+        <div class="modal-stats">
+            <h3> Stats </h3>
+            ${pokemon.stats.map(stat => `
+                <div>
+                    <span>${stat.stat.name.toUpperCase()}:</span>
+                    <span>${stat.base_stat}</span>
+                </div>
+            `).join('')}
+        </div>
+    `;
+    modal.style.display = "block";
 
-                    const playCryButton = document.getElementById('playCryButton');
-                    playCryButton.addEventListener('click', () => {
-                        const audio = new Audio(`https://veekun.com/dex/media/pokemon/cries/${pokemon.id}.ogg`);
-                        audio.play();
-                    });
+    const playCryButton = document.getElementById('playCryButton');
+    playCryButton.addEventListener('click', () => {
+        const audio = new Audio(`https://veekun.com/dex/media/pokemon/cries/${pokemon.id}.ogg`);
+        audio.play();
+    });
+});
+
                 });
             });
     }
