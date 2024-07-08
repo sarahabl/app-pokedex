@@ -116,24 +116,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 modalContent.innerHTML = `
                     <div class="modal-header">
-                        <h2>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)} (#${pokemon.id})</h2>
-                        <button id="playCryButton">L'écouter</button>
+                        <h2 class="name-pokemon">${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)} (#${pokemon.id})</h2>
+                        <button id="playCryButton">🔊</button>
                     </div>
-                    <img src="${animatedImageUrl}" alt="${pokemon.name}">
-                    <h3> Caractéristiques </h3>
-                    <p>Height: ${pokemon.height / 10} m</p>
-                    <p>Weight: ${pokemon.weight / 10} kg</p>
-                    <p>Abilities: ${abilities}</p>
-                    <p>${description}</p>
-                    <div class="modal-stats">
-                    <h3> Stats </h3>
-                        ${pokemon.stats.map(stat => `
-                            <div>
-                                <span>${stat.stat.name.toUpperCase()}:</span>
-                                <span>${stat.base_stat}</span>
-                            </div>
-                        `).join('')}
-                    </div>
+                    <img src="${animatedImageUrl}" alt="${pokemon.name}" class="img-pokemon">
+                    <p class="height"> ${pokemon.height / 10} m</p>
+                    <p class="weight"> ${pokemon.weight / 10} kg</p>
+                    <p class="abilities"> ${abilities}</p>
+                    <p class="intro">${description}</p>
                 `;
                 modal.style.display = "block";
 
