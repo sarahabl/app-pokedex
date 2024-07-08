@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     // Sélection des éléments HTML nécessaires
     const pokemonContainer = document.getElementById('pokemonContainer');
     const searchInput = document.getElementById('searchInput');
@@ -7,18 +7,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('pokemonModal');
     const modalContent = document.getElementById('modalContent');
     const closeModal = document.querySelector('.close');
-    const resetButton = document.getElementById('resetButton'); // Ajout du bouton de réinitialisation
+    const resetButton = document.getElementById('resetButton');
 
-    // Chargement des Types de Pokémon
+    let pokemonData = [];
+    let pokemonDetails = [];
+
+    // Chargement des Types de Pokémon en français
     fetch('https://pokeapi.co/api/v2/type')
         .then(response => response.json())
         .then(data => {
             const types = data.results;
             types.forEach(type => {
-                const option = document.createElement('option');
-                option.value = type.name;
-                option.textContent = type.name.charAt(0).toUpperCase() + type.name.slice(1);
-                typeFilter.appendChild(option);
+                fetch(type.url)
+                    .then(response => response.json())
+                    .then(typeData => {
+                        const option = document.createElement('option');
+                        const frenchNameEntry = typeData.names.find(name => name.language.name === 'fr');
+                        option.value = type.name;
+                        option.textContent = frenchNameEntry ? frenchNameEntry.name : type.name;
+                        typeFilter.appendChild(option);
+                    });
             });
         });
 
@@ -27,8 +35,23 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             const pokemons = data.results;
-            displayPokemons(pokemons);
+            pokemonData = pokemons;
+            loadPokemonDetails(pokemons);
         });
+
+    // Chargement des détails des Pokémon
+    function loadPokemonDetails(pokemons) {
+        Promise.all(pokemons.map(pokemon => fetch(pokemon.url).then(response => response.json()))).then(details => {
+            Promise.all(details.map(detail => fetch(detail.species.url).then(response => response.json()).then(speciesData => {
+                const frenchNameEntry = speciesData.names.find(entry => entry.language.name === 'fr');
+                detail.frenchName = frenchNameEntry ? frenchNameEntry.name : detail.name;
+                return detail;
+            }))).then(detailsInFrench => {
+                pokemonDetails = detailsInFrench;
+                displayPokemons(detailsInFrench);
+            });
+        });
+    }
 
     // Filtrage des Pokémon par Nom et Type
     searchInput.addEventListener('input', () => {
@@ -39,104 +62,125 @@ document.addEventListener('DOMContentLoaded', () => {
         filterPokemons();
     });
 
-    // Filtrage des Pokémon 
     function filterPokemons() {
         const searchTerm = searchInput.value.toLowerCase();
         const selectedType = typeFilter.value;
 
-        fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
-            .then(response => response.json())
-            .then(data => {
-                const filteredPokemons = data.results.filter(pokemon => {
-                    return pokemon.name.includes(searchTerm);
-                });
+        let filteredPokemons = pokemonDetails.filter(pokemon => {
+            return pokemon.frenchName.toLowerCase().includes(searchTerm);
+        });
 
-                if (selectedType) {
-                    const typeUrl = `https://pokeapi.co/api/v2/type/${selectedType}`;
-                    fetch(typeUrl)
-                        .then(response => response.json())
-                        .then(typeData => {
-                            const typePokemons = typeData.pokemon.map(p => p.pokemon);
-                            const finalFilteredPokemons = filteredPokemons.filter(p => typePokemons.find(tp => tp.name === p.name));
-                            displayPokemons(finalFilteredPokemons);
-                        });
-                } else {
-                    displayPokemons(filteredPokemons);
-                }
-            });
+        if (selectedType) {
+            const typeUrl = `https://pokeapi.co/api/v2/type/${selectedType}`;
+            fetch(typeUrl)
+                .then(response => response.json())
+                .then(typeData => {
+                    const typePokemons = typeData.pokemon.map(p => p.pokemon.name);
+                    const finalFilteredPokemons = filteredPokemons.filter(p => typePokemons.includes(p.name));
+                    displayPokemons(finalFilteredPokemons);
+                });
+        } else {
+            displayPokemons(filteredPokemons);
+        }
     }
 
-    // Affichage des Pokémon
     function displayPokemons(pokemons) {
         pokemonContainer.innerHTML = '';
-        pokemons.forEach(pokemon => {
-            fetch(pokemon.url)
-                .then(response => response.json())
-                .then(data => {
-                    const pokemonCard = document.createElement('div');
-                    pokemonCard.classList.add('pokemonCard');
+        pokemons.sort((a, b) => a.id - b.id).forEach(pokemon => {
+            const pokemonCard = document.createElement('div');
+            pokemonCard.classList.add('pokemonCard');
 
-                    const pokemonImage = document.createElement('img');
-                    pokemonImage.src = data.sprites.versions['generation-v']['black-white'].animated.front_default; // Utilisation de l'image animée
+            const pokemonImage = document.createElement('img');
+            pokemonImage.src = pokemon.sprites.front_default;
 
-                    const pokemonName = document.createElement('h3');
-                    pokemonName.textContent = data.name.charAt(0).toUpperCase() + data.name.slice(1);
+            const pokemonNumber = document.createElement('h3');
+            pokemonNumber.textContent = `#${pokemon.id}`;
 
-                    const pokemonTypes = document.createElement('div');
-                    pokemonTypes.classList.add('pokemonType');
-                    data.types.forEach(typeInfo => {
+            const pokemonNameElement = document.createElement('h3');
+            pokemonNameElement.textContent = pokemon.frenchName.charAt(0).toUpperCase() + pokemon.frenchName.slice(1);
+
+            const pokemonTypes = document.createElement('div');
+            pokemonTypes.classList.add('pokemonType');
+            pokemon.types.forEach(typeInfo => {
+                fetch(typeInfo.type.url)
+                    .then(response => response.json())
+                    .then(typeData => {
                         const type = document.createElement('span');
-                        type.textContent = typeInfo.type.name;
-                        type.classList.add(typeInfo.type.name); // Ajout de la classe dynamique
+                        const typeNameEntry = typeData.names.find(entry => entry.language.name === 'fr');
+                        type.textContent = typeNameEntry ? typeNameEntry.name : typeInfo.type.name;
+                        type.classList.add(typeInfo.type.name);
                         pokemonTypes.appendChild(type);
                     });
+            });
 
-                    pokemonCard.appendChild(pokemonImage);
-                    pokemonCard.appendChild(pokemonName);
-                    pokemonCard.appendChild(pokemonTypes);
-                    pokemonContainer.appendChild(pokemonCard);
+            pokemonCard.appendChild(pokemonImage);
+            pokemonCard.appendChild(pokemonNumber);
+            pokemonCard.appendChild(pokemonNameElement);
+            pokemonCard.appendChild(pokemonTypes);
+            pokemonContainer.appendChild(pokemonCard);
 
-                    pokemonCard.addEventListener('click', () => {
-                        showPokemonDetails(data);
-                    });
-                });
+            pokemonCard.addEventListener('click', () => {
+                showPokemonDetails(pokemon);
+            });
         });
     }
 
-    // Affichage des Détails des Pokémon
     function showPokemonDetails(pokemon) {
         fetch(pokemon.species.url)
             .then(response => response.json())
             .then(speciesData => {
-                const description = speciesData.flavor_text_entries.find(entry => entry.language.name === 'fr').flavor_text;
-                const abilities = pokemon.abilities.map(ability => ability.ability.name).join(', ');
+const descriptionEntry = speciesData.flavor_text_entries.find(entry => entry.language.name === 'fr');
+const description = descriptionEntry ? descriptionEntry.flavor_text : 'Description non disponible';
+const abilities = pokemon.abilities.map(ability => {
+    return fetch(ability.ability.url)
+        .then(response => response.json())
+        .then(abilityData => {
+            const abilityNameEntry = abilityData.names.find(entry => entry.language.name === 'fr');
+            return abilityNameEntry ? abilityNameEntry.name : ability.ability.name;
+        });
+});
 
-                // Récupération de l'image animée pour la carte modale
-                const animatedImageUrl = pokemon.sprites.versions['generation-v']['black-white'].animated.front_default;
+Promise.all(abilities).then(abilitiesInFrench => {
+    const abilitiesText = abilitiesInFrench.join(', ');
 
-                modalContent.innerHTML = `
-                    <div class="modal-header">
-                        <h2 class="name-pokemon">${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)} (#${pokemon.id})</h2>
-                        <button id="playCryButton">🔊</button>
-                    </div>
-                    <img src="${animatedImageUrl}" alt="${pokemon.name}" class="img-pokemon">
-                    <p class="height"> ${pokemon.height / 10} m</p>
-                    <p class="weight"> ${pokemon.weight / 10} kg</p>
-                    <p class="abilities"> ${abilities}</p>
-                    <p class="intro">${description}</p>
-                `;
-                modal.style.display = "block";
+    const frenchNameEntry = speciesData.names.find(entry => entry.language.name === 'fr');
+    const pokemonName = frenchNameEntry ? frenchNameEntry.name : pokemon.name;
 
-                // Ajouter le gestionnaire d'événements pour le bouton de lecture
-                const playCryButton = document.getElementById('playCryButton');
-                playCryButton.addEventListener('click', () => {
-                    const audio = new Audio(`https://veekun.com/dex/media/pokemon/cries/${pokemon.id}.ogg`);
-                    audio.play();
+    const animatedImageUrl = pokemon.sprites.versions['generation-v']['black-white'].animated.front_default;
+
+    modalContent.innerHTML = `
+        <div class="modal-header">
+            <h2>${pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1)} (#${pokemon.id})</h2>
+            <button id="playCryButton">🔊</button>
+        </div>
+        <img src="${animatedImageUrl}" alt="${pokemonName}" class="img-pokemon">
+        <p class="height"> ${pokemon.height / 10} m</p>
+        <p class="weight"> ${pokemon.weight / 10} kg</p>
+        <p class="abilities"> ${abilitiesText}</p>
+        <p class="intro">${description}</p>
+        <div class="modal-stats">
+            <h3> Stats </h3>
+            ${pokemon.stats.map(stat => `
+                <div>
+                    <span>${stat.stat.name.toUpperCase()}:</span>
+                    <span>${stat.base_stat}</span>
+                </div>
+            `).join('')}
+        </div>
+    `;
+    modal.style.display = "block";
+
+    const playCryButton = document.getElementById('playCryButton');
+    playCryButton.addEventListener('click', () => {
+        const audio = new Audio(`https://veekun.com/dex/media/pokemon/cries/${pokemon.id}.ogg`);
+        audio.play();
+    });
+});
+
                 });
             });
     }
 
-    // Fermeture de la Modale
     closeModal.addEventListener('click', () => {
         modal.style.display = "none";
     });
@@ -147,15 +191,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Bouton pour réinitialiser les champs de recherche et de filtre
     resetButton.addEventListener('click', () => {
         searchInput.value = '';
         typeFilter.value = '';
-        fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
-            .then(response => response.json())
-            .then(data => {
-                const pokemons = data.results;
-                displayPokemons(pokemons);
-            });
+        displayPokemons(pokemonDetails);
     });
 });
