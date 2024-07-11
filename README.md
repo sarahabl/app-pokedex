@@ -31,5 +31,5 @@ Les contributions sont les bienvenues. Veuillez ouvrir une issue pour discuter d
 
 ## Auteurs
 
-- [sarahabl](https://github.com/sarahabl)
 - [AlexAequo](https://github.com/AlexAequo)
+- [sarahabl](https://github.com/sarahabl)
